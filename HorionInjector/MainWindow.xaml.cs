@@ -65,7 +65,6 @@ namespace HorionInjector
         public MainWindow()
         {
             InitializeComponent();
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
 
             Task.Run(() =>
             {
