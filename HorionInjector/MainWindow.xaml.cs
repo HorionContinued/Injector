@@ -167,10 +167,30 @@ namespace HorionInjector
             if (processes.Length == 0)
             {
                 status = "launching minecraft";
-                Interaction.Shell("explorer.exe shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App", Wait: false);
-                while (processes.Length == 0)
-                    processes = Process.GetProcessesByName("Minecraft.Windows");
-                Thread.Sleep(100);
+                if (Interaction.Shell("explorer.exe shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App", Wait: false) == 0)
+                {
+                    MessageBox.Show("Failed to launch Minecraft (Is it installed?)");
+                    done = true;
+                    return;
+                }
+
+                Task.Run(() =>
+                {
+                    int t = 0;
+                    while (processes.Length == 0)
+                    {
+                        if (++t > 200)
+                        {
+                            MessageBox.Show("Minecraft launch took too long.");
+                            done = true;
+                            return;
+                        }
+
+                        processes = Process.GetProcessesByName("Minecraft.Windows");
+                        Thread.Sleep(10);
+                    }
+                    Thread.Sleep(100);
+                }).Wait();
             }
             var process = processes.OrderBy(p => p.StartTime).First();
 
