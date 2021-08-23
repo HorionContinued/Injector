@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -65,7 +63,6 @@ namespace HorionInjector
                 goto done;
             }
 
-
             SetStatus("setting file perms");
             try
             {
@@ -108,7 +105,7 @@ namespace HorionInjector
                     Thread.Sleep(100);
                 }).Wait();
             }
-            var process = processes.OrderBy(p => p.StartTime).First();
+            var process = processes.OrderBy(p => p.StartTime).Last();
 
             for (int i = 0; i < process.Modules.Count; i++)
             {
