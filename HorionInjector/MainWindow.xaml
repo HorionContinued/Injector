@@ -12,6 +12,11 @@
 
         <Image Source="horion-banner.png" Width="300" Margin="0, 0, 0, 80"/>
 
+        <Label 
+            x:Name="ConnectionStateLabel"
+            VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"
+        />
+
         <Label
             x:Name="InjectButton"
             Content="inject"
@@ -76,5 +81,7 @@
                 </Style>
             </Label.Style>
         </Label>
+
+        <Label Foreground="SlateGray" x:Name="VersionLabel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" />
     </Grid>
 </Window>
