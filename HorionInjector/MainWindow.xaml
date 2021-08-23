@@ -6,16 +6,86 @@
         xmlns:local="clr-namespace:HorionInjector"
         mc:Ignorable="d"
         ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
-        Title="Horion Injector" Height="300" Width="500">
+        Title="Horion Injector" Height="300" Width="500"
+        WindowStyle="None" AllowsTransparency="True" Background="#121212">
+
+    <Window.Clip>
+        <RectangleGeometry Rect="0,0,500,300" RadiusX="15" RadiusY="15"/>
+    </Window.Clip>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation 
+                        From="450" To="400"  Duration="00:00:0.5"
+                        Storyboard.TargetProperty="(Window.Top)">
+                        <DoubleAnimation.EasingFunction>
+                            <QuadraticEase EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
 
     <Grid>
+        <Image Source="console.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0, 12, 35, 0" MouseLeftButtonUp="ConsoleButton_Click">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.8" Storyboard.TargetProperty="(Image.Opacity)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="1" Storyboard.TargetProperty="(Image.Opacity)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
 
-        <Image Source="horion-banner.png" Width="300" Margin="0, 0, 0, 80"/>
+        <Label
+            Content="✕"
+            FontWeight="ExtraBold" FontSize="20" Foreground="White"
+            Height="30" Width="30" Padding="0" Margin="5"
+            HorizontalAlignment="Right" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+            MouseLeftButtonUp="CloseWindow">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.1" To="Coral" Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.1" To="White" Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
 
-        <Label 
-            x:Name="ConnectionStateLabel"
-            VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"
-        />
+        <Image Source="horion-banner.png" Width="300" Margin="0, 0, 0, 80" />
 
         <Label
             x:Name="InjectButton"
@@ -82,6 +152,7 @@
             </Label.Style>
         </Label>
 
-        <Label Foreground="SlateGray" x:Name="VersionLabel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" />
+        <Label FontFamily="Bahnschrift" x:Name="ConnectionStateLabel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
+        <Label FontFamily="Bahnschrift" Foreground="White" x:Name="VersionLabel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" />
     </Grid>
 </Window>

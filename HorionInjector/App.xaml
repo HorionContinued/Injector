@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:HorionInjector"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <Style TargetType="Image">
+            <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+        </Style>
     </Application.Resources>
 </Application>

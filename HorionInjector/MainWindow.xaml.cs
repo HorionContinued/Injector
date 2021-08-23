@@ -21,6 +21,9 @@ namespace HorionInjector
         private bool _done = true;
         private int _ticks;
 
+        private ConnectionState _connectionState;
+        private ConsoleWindow console = new ConsoleWindow();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -70,11 +73,12 @@ namespace HorionInjector
         enum ConnectionState { None, Connected, Disconnected }
         private void SetConnectionState(ConnectionState state)
         {
+            _connectionState = state;
             switch (state)
             {
                 case ConnectionState.None:
                     ConnectionStateLabel.Content = "Not connected";
-                    ConnectionStateLabel.Foreground = System.Windows.Media.Brushes.SlateGray;
+                    ConnectionStateLabel.Foreground = System.Windows.Media.Brushes.White;
                     break;
                 case ConnectionState.Connected:
                     ConnectionStateLabel.Content = "Connected";
@@ -121,6 +125,14 @@ namespace HorionInjector
                 SetStatus("done");
         }
 
+        private void ConsoleButton_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (console.IsVisible)
+                console.Close();
+            else
+                console.Show();
+        }
+
         private bool CheckConnection()
         {
             try
@@ -138,6 +150,9 @@ namespace HorionInjector
             }
         }
 
-        private string GetVersion() => Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
+        private string GetVersion() => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        private void CloseWindow(object sender, MouseButtonEventArgs e) => Application.Current.Shutdown();
+        private void DragWindow(object sender, MouseButtonEventArgs e) => DragMove();
     }
 }

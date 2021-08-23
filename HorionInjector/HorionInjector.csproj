@@ -29,6 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="console.png" />
     <None Remove="horion-banner.png" />
   </ItemGroup>
 
@@ -37,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="console.png" />
     <Resource Include="horion-banner.png" />
   </ItemGroup>
 
