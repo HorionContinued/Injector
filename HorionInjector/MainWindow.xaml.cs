@@ -98,9 +98,11 @@ namespace HorionInjector
             SetStatus("checking connection");
             if (!CheckConnection())
             {
-                MessageBox.Show("Can't reach download server.");
-                SetStatus("done");
-                return;
+                if (MessageBox.Show("Can't reach download server. Try anyways?", null, MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    SetStatus("done");
+                    return;
+                }
             }
 
             SetStatus("downloading DLL");
@@ -115,9 +117,11 @@ namespace HorionInjector
             if (!_done) return;
             
             SetStatus("selecting DLL");
-            var diag = new OpenFileDialog();
-            diag.Filter = "dll files (*.dll)|*.dll";
-            diag.RestoreDirectory = true;
+            var diag = new OpenFileDialog
+            {
+                Filter = "dll files (*.dll)|*.dll",
+                RestoreDirectory = true
+            };
 
             if (diag.ShowDialog().GetValueOrDefault())
                 Inject(diag.FileName);
