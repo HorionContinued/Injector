@@ -30,6 +30,8 @@
     </Window.Triggers>
 
     <Grid>
+        <Grid MouseLeftButtonDown="DragWindow" Background="Transparent"/>
+
         <Image Source="console.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0, 12, 35, 0" MouseLeftButtonUp="ConsoleButton_Click">
             <Image.Style>
                 <Style TargetType="Image">
