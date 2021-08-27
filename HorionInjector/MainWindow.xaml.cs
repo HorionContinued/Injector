@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -22,12 +23,16 @@ namespace HorionInjector
         private int _ticks;
 
         private ConnectionState _connectionState;
-        private ConsoleWindow console = new ConsoleWindow();
+        private readonly ConsoleWindow console = new ConsoleWindow();
 
         public MainWindow()
         {
+            /* Update cleanup */
+            var oldPath = Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, "old");
+            if (File.Exists(oldPath)) File.Delete(oldPath);
+
             InitializeComponent();
-            VersionLabel.Content = "v" + GetVersion();
+            VersionLabel.Content = $"v{GetVersion().Major}.{GetVersion().Minor}.{GetVersion().Revision}";
             SetConnectionState(ConnectionState.None);
 
             Task.Run(() =>
@@ -50,7 +55,13 @@ namespace HorionInjector
             });
 
             if (!CheckConnection())
+            {
                 MessageBox.Show("Couldn't connect to download server. You can still inject a custom DLL.");
+            }
+            else
+            {
+                CheckForUpdate();
+            }
         }
 
         private void SetStatus(string status)
@@ -154,7 +165,7 @@ namespace HorionInjector
             }
         }
 
-        private string GetVersion() => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
 
         private void CloseWindow(object sender, MouseButtonEventArgs e) => Application.Current.Shutdown();
         private void DragWindow(object sender, MouseButtonEventArgs e) => DragMove();
