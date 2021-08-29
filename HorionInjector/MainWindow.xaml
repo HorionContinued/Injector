@@ -32,7 +32,7 @@
     <Grid>
         <Grid MouseLeftButtonDown="DragWindow" Background="Transparent"/>
 
-        <Image Source="console.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0, 12, 35, 0" MouseLeftButtonUp="ConsoleButton_Click">
+        <Image Visibility="Hidden" Source="console.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0, 12, 35, 0" MouseLeftButtonUp="ConsoleButton_Click">
             <Image.Style>
                 <Style TargetType="Image">
                     <Style.Triggers>
@@ -154,7 +154,7 @@
             </Label.Style>
         </Label>
 
-        <Label FontFamily="Bahnschrift" x:Name="ConnectionStateLabel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
+        <Label Visibility="Hidden" FontFamily="Bahnschrift" x:Name="ConnectionStateLabel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
         <Label FontFamily="Bahnschrift" Foreground="White" x:Name="VersionLabel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" />
     </Grid>
 </Window>

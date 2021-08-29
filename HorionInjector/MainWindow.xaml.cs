@@ -32,7 +32,7 @@ namespace HorionInjector
             if (File.Exists(oldPath)) File.Delete(oldPath);
 
             InitializeComponent();
-            VersionLabel.Content = $"v{GetVersion().Major}.{GetVersion().Minor}.{GetVersion().Revision}";
+            VersionLabel.Content = $"v{GetVersion().Major}.{GetVersion().Minor}.{GetVersion().Build}";
             SetConnectionState(ConnectionState.None);
 
             Task.Run(() =>
@@ -152,12 +152,10 @@ namespace HorionInjector
         {
             try
             {
-                Ping ping = new Ping();
-                byte[] buffer = new byte[32];
-                int timeout = 1000;
-                PingOptions pingOptions = new PingOptions();
-                PingReply reply = ping.Send("horion.download", timeout, buffer, pingOptions);
-                return reply.Status == IPStatus.Success;
+                var request = (HttpWebRequest) WebRequest.Create("https://horion.download");
+                request.KeepAlive = false;
+                request.Timeout = 1000;
+                using (request.GetResponse()) return true;
             }
             catch (Exception)
             {

@@ -102,10 +102,10 @@ namespace HorionInjector
                         processes = Process.GetProcessesByName("Minecraft.Windows");
                         Thread.Sleep(10);
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(3000);
                 }).Wait();
             }
-            var process = processes.OrderBy(p => p.StartTime).Last();
+            var process = processes.First(p => p.Responding);
 
             for (int i = 0; i < process.Modules.Count; i++)
             {

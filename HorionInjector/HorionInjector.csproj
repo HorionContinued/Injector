@@ -14,7 +14,7 @@
     <RepositoryUrl>https://github.com/horionclient/Injector</RepositoryUrl>
     <Description>Injector for Horion, a Minecraft: Bedrock Edition utility mod</Description>
     <SignAssembly>false</SignAssembly>
-    <Version>1.1.0</Version>
+    <Version>1.1.2</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>©2021</Copyright>
     <PackageId>HorionInjector</PackageId>
