@@ -7,7 +7,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using Microsoft.VisualBasic;
 
 namespace HorionInjector
@@ -53,13 +52,13 @@ namespace HorionInjector
         {
             if (!File.Exists(path))
             {
-                MessageBox.Show("DLL not found, your Antivirus might have deleted it.");
+                SetStatus("DLL not found, your Antivirus might have deleted it.", true);
                 goto done;
             }
 
             if (File.ReadAllBytes(path).Length < 10)
             {
-                MessageBox.Show("DLL broken (Less than 10 bytes)");
+                SetStatus("DLL broken (Less than 10 bytes)", true);
                 goto done;
             }
 
@@ -73,7 +72,7 @@ namespace HorionInjector
             }
             catch (Exception)
             {
-                MessageBox.Show("Could not set permissions, try running the injector as admin.");
+                SetStatus("Could not set permissions, try running the injector as admin.", true);
                 goto done;
             }
 
@@ -84,7 +83,7 @@ namespace HorionInjector
                 SetStatus("launching minecraft");
                 if (Interaction.Shell("explorer.exe shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App", Wait: false) == 0)
                 {
-                    MessageBox.Show("Failed to launch Minecraft (Is it installed?)");
+                    SetStatus("Failed to launch Minecraft (Is it installed?)", true);
                     goto done;
                 }
 
@@ -95,7 +94,7 @@ namespace HorionInjector
                     {
                         if (++t > 200)
                         {
-                            MessageBox.Show("Minecraft launch took too long.");
+                            SetStatus("Minecraft launch took too long.", true);
                             return;
                         }
 
@@ -111,7 +110,7 @@ namespace HorionInjector
             {
                 if (process.Modules[i].FileName == path)
                 {
-                    MessageBox.Show("Already injected!");
+                    SetStatus("Already injected!", true);
                     goto done;
                 }
             }
@@ -120,7 +119,7 @@ namespace HorionInjector
             IntPtr handle = OpenProcess((IntPtr)2035711, false, (uint)process.Id);
             if (handle == IntPtr.Zero || !process.Responding)
             {
-                MessageBox.Show("Failed to get process handle");
+                SetStatus("Failed to get process handle", true);
                 goto done;
             }
 
@@ -130,7 +129,7 @@ namespace HorionInjector
             IntPtr p3 = CreateRemoteThread(handle, IntPtr.Zero, 0U, procAddress, p1, 0U, ref p2);
             if (p3 == IntPtr.Zero)
             {
-                MessageBox.Show("Failed to create remote thread");
+                SetStatus("Failed to create remote thread", true);
                 goto done;
             }
 
@@ -150,7 +149,7 @@ namespace HorionInjector
 
             IntPtr windowH = FindWindow(null, "Minecraft");
             if (windowH == IntPtr.Zero)
-                Console.WriteLine("Couldn't get window handle");
+                SetStatus("Couldn't get window handle");
             else
                 SetForegroundWindow(windowH);
 

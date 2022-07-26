@@ -5,8 +5,88 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HorionInjector"
         mc:Ignorable="d"
-        Title="Console" Height="450" Width="800">
+        Title="Console" Height="350" Width="600" MinHeight="300" MinWidth="500"
+        Background="#121212"
+        Deactivated="Window_Deactivated">
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="60" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="55" MinHeight="55" />
+        </Grid.RowDefinitions>
+
+        <TextBox
+			x:Name="LogBox" Grid.Row="0"
+			Margin="15, 15, 15, 0" Padding="10"
+			FontSize="16" FontFamily="Bahnschrift"
+			IsReadOnly="True" TextWrapping="Wrap"
+			Foreground="White" Background="#2F3135" BorderThickness="0"
+			TextChanged="LogBox_TextChanged">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <Image
+            x:Name="Pin" Grid.Row="0" Opacity="0.6"
+	        Source="pin.png"
+			Margin="0,25,25,0" 
+		    Width="25" Height="25"
+	        HorizontalAlignment="Right" VerticalAlignment="Top"
+	        MouseDown="Pin_MouseDown">
+        </Image>
+
+        <GridSplitter
+			Grid.Row="1"
+			Height="15"
+			Foreground="#121212" Background="#121212"
+			HorizontalAlignment="Stretch" />
+
+        <TextBox
+			x:Name="InputBox" Grid.Row="2"
+            Margin="15, 0, 15, 15" Padding="10, 10, 40, 10"
+			FontSize="16" FontFamily="Bahnschrift"
+			TextWrapping="Wrap" AcceptsReturn="True"
+			Foreground="White" Background="#2F3135" BorderThickness="0"
+			PreviewKeyUp="Input_PreviewKeyUp">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <Label
+            x:Name="SendButton" Grid.Row="2"
+	        Content="➜"
+	        FontWeight="ExtraBold" FontSize="25" Foreground="White"
+	        Height="35" Width="35" Padding="0" Margin="0,-15,20,0"
+	        HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+            MouseDown="SendButton_MouseDown">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.8" Storyboard.TargetProperty="(Label.Opacity)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="1" Storyboard.TargetProperty="(Label.Opacity)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
     </Grid>
 </Window>

@@ -17,8 +17,8 @@
             <BeginStoryboard>
                 <Storyboard>
                     <DoubleAnimation 
-                        From="450" To="400"  Duration="00:00:0.5"
-                        Storyboard.TargetProperty="(Window.Top)">
+                        From="0" To="1.0"  Duration="00:00:0.5"
+                        Storyboard.TargetProperty="(Window.Opacity)">
                         <DoubleAnimation.EasingFunction>
                             <QuadraticEase EasingMode="EaseOut"/>
                         </DoubleAnimation.EasingFunction>
@@ -31,7 +31,7 @@
     <Grid>
         <Grid MouseLeftButtonDown="DragWindow" Background="Transparent"/>
 
-        <Image Visibility="Hidden" Source="console.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0, 12, 35, 0" MouseLeftButtonUp="ConsoleButton_Click">
+        <Image Source="console.png" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="top" Margin="0, 12, 35, 0" MouseLeftButtonUp="ConsoleButton_Click">
             <Image.Style>
                 <Style TargetType="Image">
                     <Style.Triggers>

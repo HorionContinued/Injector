@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Windows;
@@ -10,16 +9,29 @@ namespace HorionInjector
 {
     partial class MainWindow
     {
-        private void CheckForUpdate()
+        private bool CheckForUpdate()
         {
-
-            var latest = new WebClient().DownloadString("https://horion.download/latest");
-            if (Version.Parse(latest) > GetVersion())
+            try
             {
-                if (MessageBox.Show("New update available! Do you want to update now?", null, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    Update();
-            }
 
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://horion.download/latest");
+                req.Timeout = 3000;
+                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+                StreamReader sr = new StreamReader(res.GetResponseStream() ?? throw new Exception("Couldn't get version"));
+                var latest = sr.ReadToEnd();
+                sr.Close();
+
+                if (Version.Parse(latest) > GetVersion())
+                {
+                    if (MessageBox.Show("New update available! Do you want to update now?", $"Update to v{latest}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        Update();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private void Update()
@@ -28,7 +40,7 @@ namespace HorionInjector
 
             try
             {
-                Directory.GetAccessControl(Path.GetDirectoryName(path));
+                Directory.GetAccessControl(Path.GetDirectoryName(path) ?? throw new InvalidOperationException());
             }
             catch (UnauthorizedAccessException)
             {

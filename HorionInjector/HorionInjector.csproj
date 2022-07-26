@@ -9,14 +9,14 @@
     <ApplicationIcon>horion.ico</ApplicationIcon>
     <Platforms>x64</Platforms>
     <Authors>Horion Developers</Authors>
-    <PackageProjectUrl>https://github.com/horionclient</PackageProjectUrl>
+    <PackageProjectUrl>https://horion.download</PackageProjectUrl>
     <RepositoryType>GitHub</RepositoryType>
     <RepositoryUrl>https://github.com/horionclient/Injector</RepositoryUrl>
     <Description>Injector for Horion, a Minecraft: Bedrock Edition utility mod</Description>
     <SignAssembly>false</SignAssembly>
-    <Version>1.1.2</Version>
+    <Version>1.2.0</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Copyright>©2021</Copyright>
+    <Copyright>©2022</Copyright>
     <PackageId>HorionInjector</PackageId>
     <Product>Horion Injector</Product>
     <PackageIcon></PackageIcon>
@@ -54,6 +54,7 @@
   <ItemGroup>
     <Resource Include="console.png" />
     <Resource Include="horion-banner.png" />
+    <Resource Include="pin.png" />
   </ItemGroup>
 
 </Project>

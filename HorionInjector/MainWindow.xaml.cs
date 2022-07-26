@@ -24,8 +24,10 @@ namespace HorionInjector
         private int _ticks;
         private int _adRefCooldown;
 
+        private bool _network = false;
+
         private ConnectionState _connectionState;
-        private readonly ConsoleWindow console = new ConsoleWindow();
+        private static readonly ConsoleWindow Console = new ConsoleWindow();
 
         public MainWindow()
         {
@@ -38,7 +40,13 @@ namespace HorionInjector
 
             VersionLabel.Content = $"v{GetVersion().Major}.{GetVersion().Minor}.{GetVersion().Build}";
             SetConnectionState(ConnectionState.None);
-            
+
+            _network = CheckForUpdate();
+            if (!_network)
+            {
+                MessageBox.Show("Couldn't connect to download server. You can still inject a custom DLL.");
+            }
+
             Task.Run(() =>
             {
                 while (true)
@@ -63,19 +71,19 @@ namespace HorionInjector
                     }
                 }
             });
-
-            if (!CheckConnection())
-            {
-                MessageBox.Show("Couldn't connect to download server. You can still inject a custom DLL.");
-            }
-            else
-            {
-                CheckForUpdate();
-            }
         }
 
-        private void SetStatus(string status)
+        private void SetStatus(string status, bool popup = false)
         {
+            Console.Log(status);
+
+            if (popup)
+            {
+                MessageBox.Show(status);
+                return;
+            }
+
+
             if (status == "done")
             {
                 _done = true;
@@ -88,7 +96,6 @@ namespace HorionInjector
                 _done = false;
                 _status = status;
             }
-            Console.WriteLine("[Status] " + status);
         }
 
         enum ConnectionState { None, Connected, Disconnected }
@@ -115,9 +122,7 @@ namespace HorionInjector
         private void InjectButton_Left(object sender, RoutedEventArgs e)
         {
             if (!_done) return;
-
-            SetStatus("checking connection");
-            if (!CheckConnection())
+            if (!_network)
             {
                 if (MessageBox.Show("Can't reach download server. Try anyways?", null, MessageBoxButton.YesNo) == MessageBoxResult.No)
                 {
@@ -127,10 +132,12 @@ namespace HorionInjector
             }
 
             SetStatus("downloading DLL");
-            var wc = new WebClient();
             var file = Path.Combine(Path.GetTempPath(), "Horion.dll");
-            wc.DownloadFileCompleted += (_, __) => { Task.Run(() => Inject(file)); SetAds(); };
-            wc.DownloadFileAsync(new Uri("https://horion.download/bin/Horion.dll"), file);
+            using (var wc = new WebClient())
+            {
+                wc.DownloadFileCompleted += (_, __) => { Task.Run(() => Inject(file)); SetAds(); };
+                wc.DownloadFileAsync(new Uri("https://horion.download/bin/Horion.dll"), file);
+            }
         }
 
         private void InjectButton_Right(object sender, MouseButtonEventArgs e)
@@ -145,17 +152,17 @@ namespace HorionInjector
             };
 
             if (diag.ShowDialog().GetValueOrDefault())
-                Inject(diag.FileName);
+                Task.Run(new Action(() => Inject(diag.FileName)));
             else
                 SetStatus("done");
         }
 
         private void ConsoleButton_Click(object sender, MouseButtonEventArgs e)
         {
-            if (console.IsVisible)
-                console.Close();
+            if (Console.IsVisible)
+                Console.Close();
             else
-                console.Show();
+                Console.Show();
         }
 
         private async void SetupAdView()
@@ -190,7 +197,7 @@ namespace HorionInjector
 
         private void SetAds(bool enable = true)
         {
-            if (!CheckConnection())
+            if (!_network)
                 return;
 
             if(enable) RefreshAd();
@@ -208,21 +215,6 @@ namespace HorionInjector
             "If you don't want to support the development, you can always just use a different injector and download the DLL manually at horion.download/dll!",
             "More info about ads"
         );
-
-        private bool CheckConnection()
-        {
-            try
-            {
-                var request = (HttpWebRequest) WebRequest.Create("https://horion.download");
-                request.KeepAlive = false;
-                request.Timeout = 1000;
-                using (request.GetResponse()) return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
 
         private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
 
