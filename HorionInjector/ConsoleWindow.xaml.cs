@@ -11,7 +11,7 @@ namespace HorionInjector
     /// </summary>
     public partial class ConsoleWindow
     {
-        private bool _stayOnTop = false;
+        private bool _stayOnTop;
 
         public ConsoleWindow()
         {
@@ -22,7 +22,7 @@ namespace HorionInjector
 
         private void AppendLine(string text) => LogBox.AppendText((LogBox.Text.Length != 0 ? Environment.NewLine : "") + text);
 
-        private void Pin_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Pin_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _stayOnTop = !_stayOnTop;
             Pin.Opacity = _stayOnTop ? 1 : 0.6;

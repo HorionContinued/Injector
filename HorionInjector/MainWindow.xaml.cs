@@ -24,7 +24,7 @@ namespace HorionInjector
         private int _ticks;
         private int _adRefCooldown;
 
-        private bool _network = false;
+        private readonly bool _network;
 
         private ConnectionState _connectionState;
         private static readonly ConsoleWindow Console = new ConsoleWindow();
@@ -98,8 +98,9 @@ namespace HorionInjector
             }
         }
 
-        enum ConnectionState { None, Connected, Disconnected }
-        private void SetConnectionState(ConnectionState state)
+        internal enum ConnectionState { None, Connected, Disconnected }
+        internal ConnectionState GetConnectionState() => _connectionState;
+        internal void SetConnectionState(ConnectionState state)
         {
             _connectionState = state;
             switch (state)
@@ -152,7 +153,7 @@ namespace HorionInjector
             };
 
             if (diag.ShowDialog().GetValueOrDefault())
-                Task.Run(new Action(() => Inject(diag.FileName)));
+                Task.Run(() => Inject(diag.FileName));
             else
                 SetStatus("done");
         }
@@ -218,7 +219,14 @@ namespace HorionInjector
 
         private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
 
-        private void CloseWindow(object sender, MouseButtonEventArgs e) => Application.Current.Shutdown();
+        private void CloseWindow(object sender, MouseButtonEventArgs e) => Close();
         private void DragWindow(object sender, MouseButtonEventArgs e) => DragMove();
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            AdView.Dispose();
+            Application.Current.Shutdown();
+        }
     }
 }
