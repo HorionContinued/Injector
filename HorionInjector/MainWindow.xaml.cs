@@ -198,7 +198,7 @@ namespace HorionInjector
 
         private void SetAds(bool enable = true)
         {
-            if (!_network)
+            if (!Configuration.showAds || !_network)
                 return;
 
             if(enable) RefreshAd();

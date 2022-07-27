@@ -4,26 +4,34 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Windows;
+using Newtonsoft.Json;
 
 namespace HorionInjector
 {
     partial class MainWindow
     {
+        public static InjectorConfiguration Configuration;
+        public struct InjectorConfiguration
+        {
+            public string latest;
+            public bool showAds;
+            public string supportedVersions;
+        }
+
         private bool CheckForUpdate()
         {
             try
             {
-
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://horion.download/latest");
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://horion.download/config");
                 req.Timeout = 3000;
                 HttpWebResponse res = (HttpWebResponse)req.GetResponse();
                 StreamReader sr = new StreamReader(res.GetResponseStream() ?? throw new Exception("Couldn't get version"));
-                var latest = sr.ReadToEnd();
+                Configuration = JsonConvert.DeserializeObject<InjectorConfiguration>(sr.ReadToEnd());
                 sr.Close();
 
-                if (Version.Parse(latest) > GetVersion())
+                if (Version.Parse(Configuration.latest) > GetVersion())
                 {
-                    if (MessageBox.Show("New update available! Do you want to update now?", $"Update to v{latest}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("New update available! Do you want to update now?", $"Update to v{Configuration.latest}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         Update();
                 }
                 return true;

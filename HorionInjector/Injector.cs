@@ -5,8 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 
 namespace HorionInjector
@@ -50,6 +50,10 @@ namespace HorionInjector
 
         private void Inject(string path)
         {
+            SetStatus("checking installation");
+            if(!CheckGame())
+                goto done;
+            
             if (!File.Exists(path))
             {
                 SetStatus("DLL not found, your Antivirus might have deleted it.", true);
@@ -83,26 +87,23 @@ namespace HorionInjector
                 SetStatus("launching minecraft");
                 if (Interaction.Shell("explorer.exe shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App", Wait: false) == 0)
                 {
-                    SetStatus("Failed to launch Minecraft (Is it installed?)", true);
+                    SetStatus("Failed to launch Minecraft for you. Please try starting it manually.", true);
                     goto done;
                 }
 
-                Task.Run(() =>
+                int t = 0;
+                while (processes.Length == 0)
                 {
-                    int t = 0;
-                    while (processes.Length == 0)
+                    if (++t > 200)
                     {
-                        if (++t > 200)
-                        {
-                            SetStatus("Minecraft launch took too long.", true);
-                            return;
-                        }
-
-                        processes = Process.GetProcessesByName("Minecraft.Windows");
-                        Thread.Sleep(10);
+                        SetStatus("Minecraft launch took too long.", true);
+                        return;
                     }
-                    Thread.Sleep(3000);
-                }).Wait();
+
+                    processes = Process.GetProcessesByName("Minecraft.Windows");
+                    Thread.Sleep(10);
+                }
+                Thread.Sleep(3000);
             }
             var process = processes.First(p => p.Responding);
 
@@ -154,6 +155,36 @@ namespace HorionInjector
                 SetForegroundWindow(windowH);
 
             done: SetStatus("done");
+        }
+
+        private bool CheckGame()
+        {
+            var psQuery = new Process
+            {
+                StartInfo = new ProcessStartInfo("powershell.exe", "Get-AppxPackage Microsoft.MinecraftUWP | Select -ExpandProperty Version")
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
+                }
+            };
+            psQuery.Start();
+            string version = psQuery.StandardOutput.ReadToEnd().Trim();
+            psQuery.WaitForExit();
+            psQuery.Close();
+
+            if (version == string.Empty)
+            {
+                SetStatus("Minecraft does not appear to be installed. Please make sure you have the Windows edition of the game installed.", true);
+                return false;
+            }
+
+            if (!Regex.IsMatch(version, Configuration.supportedVersions))
+            {
+                return MessageBox.Show($"Your Minecraft version ({version}) isn't supported by the latest Horion version. You can still try to inject it, but your game might crash. Continue?", "Unsupported Minecraft version", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            }
+
+            return true;
         }
     }
 }
