@@ -180,7 +180,7 @@ namespace HorionInjector
                 return false;
             }
 
-            if (!Regex.IsMatch(version, Configuration.supportedVersions))
+            if (Configuration.supportedVersions != null && !Regex.IsMatch(version, Configuration.supportedVersions))
             {
                 return MessageBox.Show($"Your Minecraft version ({version}) isn't supported by the latest Horion version. You can still try to inject it, but your game might crash. Continue?", "Unsupported Minecraft version", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
             }
