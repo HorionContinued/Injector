@@ -22,7 +22,7 @@ namespace HorionInjector
 
         private void AppendLine(string text) => LogBox.AppendText((LogBox.Text.Length != 0 ? Environment.NewLine : "") + text);
 
-        private void Pin_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Pin_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _stayOnTop = !_stayOnTop;
             Pin.Opacity = _stayOnTop ? 1 : 0.6;
@@ -41,7 +41,7 @@ namespace HorionInjector
 
         private void LogBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => LogBox.ScrollToEnd();
 
-        private void SendButton_MouseDown(object sender, MouseButtonEventArgs e) => SendInput();
+        private void SendButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => SendInput();
 
         private void Input_PreviewKeyUp(object sender, KeyEventArgs e)
         {

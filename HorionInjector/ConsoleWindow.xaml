@@ -35,7 +35,7 @@
 			Margin="0,25,25,0" 
 		    Width="25" Height="25"
 	        HorizontalAlignment="Right" VerticalAlignment="Top"
-	        MouseDown="Pin_MouseDown">
+	        MouseLeftButtonUp="Pin_MouseLeftButtonUp">
         </Image>
 
         <GridSplitter
@@ -63,7 +63,7 @@
 	        FontWeight="ExtraBold" FontSize="25" Foreground="White"
 	        Height="35" Width="35" Padding="0" Margin="0,-15,20,0"
 	        HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-            MouseDown="SendButton_MouseDown">
+            MouseLeftButtonUp="SendButton_MouseLeftButtonUp">
             <Label.Style>
                 <Style TargetType="Label">
                     <Style.Triggers>

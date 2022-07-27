@@ -166,6 +166,14 @@ namespace HorionInjector
                 Console.Show();
         }
 
+        private void ResetConfig(object sender, MouseButtonEventArgs e)
+        {
+            if(MessageBox.Show("Do you really want to reset your Horion config? (This will delete all your modules settings, keybinds, friends, etc.)", "Reset config", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\RoamingState\Horion"), true);
+            }
+        }
+
         private async void SetupAdView()
         {
             var env = await CoreWebView2Environment.CreateAsync(null, Path.Combine(Path.GetTempPath(), "WebView2UDF"));
