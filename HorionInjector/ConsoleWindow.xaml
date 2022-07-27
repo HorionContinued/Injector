@@ -11,9 +11,9 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MinHeight="60" />
+            <RowDefinition Height="100*" MinHeight="60" />
             <RowDefinition Height="15" />
-            <RowDefinition Height="55" MinHeight="55" />
+            <RowDefinition Height="*" MinHeight="55" />
         </Grid.RowDefinitions>
 
         <TextBox
