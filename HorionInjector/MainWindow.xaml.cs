@@ -229,6 +229,7 @@ namespace HorionInjector
 
         private void CloseWindow(object sender, MouseButtonEventArgs e) => Close();
         private void DragWindow(object sender, MouseButtonEventArgs e) => DragMove();
+        private void MinimizeWindow(object sender, MouseButtonEventArgs e) => this.WindowState = WindowState.Minimized;
 
         protected override void OnClosed(EventArgs e)
         {
